@@ -1,0 +1,40 @@
+
+<link rel="stylesheet" href="style.css">
+
+<h1>How to Get Current Location using Google Map Javascript API</h1>
+<div id="button-layer">
+	<button id="btnAction" onClick="locate()">My Current Location</button>
+</div>
+<div id="map-layer"></div>
+
+
+<script
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAnwoTJxUzFo-NJVF5Gq_ATixYZUs9S7qA&callback=initMap"
+	async defer></script>
+<script type="text/javascript">
+var map;
+function initMap() {
+	var mapLayer = document.getElementById("map-layer");
+	var centerCoordinates = new google.maps.LatLng(37.6, -95.665);
+	var defaultOptions = { center: centerCoordinates, zoom: 4 }
+
+	map = new google.maps.Map(mapLayer, defaultOptions);
+}
+
+function locate(){
+	document.getElementById("btnAction").disabled = true;
+	document.getElementById("btnAction").innerHTML = "Processing...";
+	if ("geolocation" in navigator){
+		navigator.geolocation.getCurrentPosition(function(position){ 
+			var currentLatitude = position.coords.latitude;
+			var currentLongitude = position.coords.longitude;
+
+			var infoWindowHTML = "Latitude: " + currentLatitude + "<br>Longitude: " + currentLongitude;
+			var infoWindow = new google.maps.InfoWindow({map: map, content: infoWindowHTML});
+			var currentLocation = { lat: currentLatitude, lng: currentLongitude };
+			infoWindow.setPosition(currentLocation);
+			document.getElementById("btnAction").style.display = 'none';
+		});
+	}
+}
+</script>
